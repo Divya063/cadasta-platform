@@ -1,3 +1,5 @@
+var map = L.map('mapid');
+
 var SMap = (function() {
   var map = L.map('mapid');
   var layerscontrol = L.control.layers().addTo(map);
@@ -62,9 +64,9 @@ var SMap = (function() {
     }
   }
 
-  load_project_extent()
+  load_project_extent();
 
-  function load_features() {;
+  function load_features() {
     if (options.fitBounds === 'locations') {
       var bounds = geojsonTileLayer.geojsonLayer.getBounds();
       if (bounds.isValid()) {
@@ -77,7 +79,7 @@ var SMap = (function() {
 
   function render_spatial_resource(){
     $.ajax(fetch_spatial_resources).done(function(data){
-      if (data.length == 0) return;
+      if (data.length === 0) return;
       var spatialResources = {};
       $.each(data, function(idx, resource){
         var name = resource.name;
@@ -85,15 +87,15 @@ var SMap = (function() {
         var group = new L.LayerGroup();
         $.each(resource.spatial_resources, function(i, spatial_resource){
           var layer = L.geoJson(spatial_resource.geom).addTo(group);
-          layers['name'] = spatial_resource.name;
-          layers['group'] = group;
+          layers.name = spatial_resource.name;
+          layers.group = group;
         });
         spatialResources[name] = layers;
       });
       $.each(spatialResources, function(sr){
         var layer = spatialResources[sr];
-        layerscontrol.addOverlay(layer['group'], layer['name'], sr);
-      })
+        layerscontrol.addOverlay(layer.group, layer.name, sr);
+      });
     });
   }
 
@@ -102,18 +104,18 @@ var SMap = (function() {
   function geoLocate() {
     return function(event) {
       map.locate({ setView: true });
-    }
+    };
   }
 
-  $(window).on('hashchange', function() {
-    if (window.location.hash === '#overview')
-      $('.content-single').removeClass('detail-hidden')
-    else {
-        $('.content-single').addClass('detail-hidden')
-    }
+  // $(window).on('hashchange', function() {
+  //   if (window.location.hash === '#overview')
+  //     $('.content-single').removeClass('detail-hidden')
+  //   else {
+  //       $('.content-single').addClass('detail-hidden')
+  //   }
 
-    window.setTimeout(function() {
-      map.invalidateSize();
-    }, 400);
-  })
+  //   window.setTimeout(function() {
+  //     map.invalidateSize();
+  //   }, 400);
+  // })
 })();
