@@ -1,13 +1,17 @@
 from django.conf.urls import include, url
 
-from ..views import async
+from ..views import default
 
 
 urls = [
     url(
-        r'^$',
-        async.ProjectDashboard.as_view(),
+        r'^overview/$',
+        default.ProjectDashboard.as_view(),
         name='dashboard'),
+    url(
+        r'^$',
+        default.ProjectDashboard.as_view(),
+        name='still_dashboard'),
 ]
 
 

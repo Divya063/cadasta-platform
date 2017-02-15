@@ -1,24 +1,28 @@
 from django.conf.urls import include, url
 
-from ..views import async
+from ..views import async, default
 
 
 urls = [
     url(
-        r'^$',
+        r'^spatial/$',
         async.SpatialUnitList.as_view(),
         name='list'),
     url(
-        r'^tiled/(?P<z>[0-9]+)/(?P<x>[0-9]+)/(?P<y>[0-9]+)/$',
+        r'^spatial/tiled/(?P<z>[0-9]+)/(?P<x>[0-9]+)/(?P<y>[0-9]+)/$',
         async.SpatialUnitTiles.as_view(),
         name='tiled'),
+    url(
+        r'^records/location/(?P<location>[-\w]+)/$',
+        default.LocationDetail.as_view(),
+        name='detail'),
 ]
 
 
 urlpatterns = [
     url(
         r'^organizations/(?P<organization>[-\w]+)/projects/'
-        '(?P<project>[-\w]+)/spatial/',
+        '(?P<project>[-\w]+)/',
         include(urls)),
     # url(urls.tilepath(r'^organizations/(?P<organization>[-\w]+)/projects/'
     #     '(?P<project>[-\w]+)/spatial/'),

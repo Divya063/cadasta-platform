@@ -35,11 +35,12 @@ class SpatialUnitGeoJsonSerializer(geo_serializers.GeoFeatureModelSerializer):
 
     def get_url(self, location):
         project = location.project
-        return reverse(
-            'locations:detail',
-            kwargs={'organization': project.organization.slug,
-                    'project': project.slug,
-                    'location': location.id})
+        return 'records/location/' + location.id
+        # return reverse(
+        #     'locations:detail',
+        #     kwargs={'organization': project.organization.slug,
+        #             'project': project.slug,
+        #             'location': location.id})
 
     def get_type(self, location):
         return location.get_type_display()
