@@ -446,6 +446,8 @@ class ProjectMap(PermissionRequiredMixin,
               'attrs': force_text(attrs)
             } for (label, url, attrs) in LEAFLET_CONFIG.get('TILES')]
 
+        #########################################
+        # SHOULD BE IN AN ASYNC VIEW
         num_locations = self.object.spatial_units.count()
         num_parties = self.object.parties.count()
         num_resources = self.object.resource_set.filter(archived=False).count()
@@ -454,6 +456,7 @@ class ProjectMap(PermissionRequiredMixin,
         context['num_locations'] = num_locations
         context['num_parties'] = num_parties
         context['num_resources'] = num_resources
+        #########################################
         return context
 
     def get_object(self, queryset=None):

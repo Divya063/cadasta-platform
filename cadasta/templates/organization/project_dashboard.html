@@ -1,22 +1,32 @@
 {% load i18n %}
 <section>
   <h2>{% trans "Project Overview" %}</h2>
-  <p>{{ object.description }}</p>
-  {% if object.urls.0 %}
-    <p><a href="{{ object.urls.0 }}" target="_blank"><span class="glyphicon glyphicon-globe"></span>{{ object.urls.0 }}</a></p>
-  {% endif %}
-  {% if object.contacts %}
+  <p><% this.description %></p>
+  <% if (this.urls[0]) {%>
+    <p><a href="<% this.urls[0] %>" target="_blank"><span class="glyphicon glyphicon-globe"></span><% this.urls[0] %></a></p>
+  <%}%>
+  <% if (this.contacts) {%>
     <h4>{% trans "Contact information" %}</h4>
     <dl class="contacts">
-    {% for contact in object.contacts %}
-      <dt>{{ contact.name }}</dt>
+    <% for (var index in this.contacts) {%>
+      <dt><% this.contacts[index].name %></dt>
       <dd class="clearfix">
-        {% if contact.email %}<a href="mailto:{{ contact.email }}"><span class="glyphicon glyphicon-envelope"></span>{{ contact.email }}</a>{% endif %}
-        {% if contact.tel %} <a href="tel:{{ contact.tel }}"><span class="glyphicon glyphicon-earphone"></span>{{ contact.tel }}</a>{% endif %}
+        <% if (this.contacts[index].email) {%>
+          <a href="mailto:<% this.contacts[index].email %>">
+            <span class="glyphicon glyphicon-envelope"></span>
+            <% this.contacts[index].email %>
+          </a>
+        <%}%>
+        <% if (this.contacts[index].tel) {%>
+          <a href="tel:<% this.contacts[index].tel %>">
+            <span class="glyphicon glyphicon-earphone"></span>
+            <% this.contacts[index].tel %>
+          </a>
+        <%}%>
       </dd>
-    {% endfor %}
+    <%}%>
     </dl>
-  {% endif %}
+  <%}%>
   <div class="divider-thick"></div>
     {% if user.is_authenticated %}
       {% if has_content or not is_allowed_add_location %}
@@ -24,23 +34,23 @@
       <ul class="list-inline stats">
         <li>
           {% blocktrans count counter=num_locations %}
-          <div class="num">{{ counter }}</div> location
+          <div class="num"><% this.num_locations %></div> location
           {% plural %}
-          <div class="num">{{ counter }}</div> locations
+          <div class="num"><% this.num_locations %></div> locations
           {% endblocktrans %}
         </li>
         <li>
           {% blocktrans count counter=num_parties %}
-          <div class="num">{{ counter }}</div> party
+          <div class="num"><% this.num_parties %></div> party
           {% plural %}
-          <div class="num">{{ counter }}</div> parties
+          <div class="num"><% this.num_parties %></div> parties
           {% endblocktrans %}
         </li>
         <li>
           {% blocktrans count counter=num_resources %}
-          <div class="num">{{ counter }}</div> resource
+          <div class="num"><% this.num_resources %></div> resource
           {% plural %}
-          <div class="num">{{ counter }}</div> resources
+          <div class="num"><% this.num_resources %></div> resources
           {% endblocktrans %}
         </li>
       </ul>

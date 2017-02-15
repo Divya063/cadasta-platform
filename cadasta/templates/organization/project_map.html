@@ -17,6 +17,7 @@
 <script src="{% static 'js/leaflet.markercluster.js' %}"></script>
 <script src="{% static 'js/L.Map.Deflate.js' %}"></script>
 <script src="{% static 'js/smap/index.js' %}"></script>
+
 <script type="text/html" id='overview-tab'>
   {% include "organization/project_dashboard.html" %} 
 </script>
@@ -24,9 +25,12 @@
   <h1>I'm not!</h1>
 </script>
 <script type="text/html" id='location-tab'>
-  <h1>It's totally a location!</h1>
+  <h1>It's totally a <% this.object %>!</h1>
 </script>
-
+<script src="{% static 'js/smap/index.js' %}"></script>
+<script>
+var dashboard_url = '{% url "async:project:dashboard" project.organization.slug project.slug %}'
+</script>
 <script>
   var url = '/async/organizations/' +
       '{{ project.organization.slug }}/projects/{{ project.slug }}/spatial/tiled/{z}/{x}/{y}'
