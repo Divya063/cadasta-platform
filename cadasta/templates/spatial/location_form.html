@@ -2,16 +2,17 @@
 {% load widget_tweaks %}
 {% load filters %}
 
+{% block extra_script %}
+
+{% endblock %}
+
 <form method="POST" id="location-wizard" class="col-sm-12 content-single" data-parsley-validate data-parsley-excluded=":hidden, [disabled]">
   {% csrf_token %}
   <div class="row">
     <!-- Start overview map  -->
-    <div class="col-md-8 map">
-      {{ form.geometry }}
-    </div>
     <!-- / end overview map -->
     <!-- Overview detail  -->
-    <div class="col-md-4 detail detail-edit">
+    <div class="col-md-12 detail detail-edit">
       <h2><span>{% trans "Location" %} </span>{% if add == 'yes' %}{% trans "Add location" %}{% else %}{% trans "Edit details" %}{% endif %}</h2>
       <div class="panel panel-default">
         <div class="panel-body">

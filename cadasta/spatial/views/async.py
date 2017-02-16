@@ -1,10 +1,18 @@
 import math
 from django.contrib.gis.geos import Polygon
+from django.core.urlresolvers import reverse
 from tutelary.mixins import APIPermissionRequiredMixin
 from rest_framework import generics
 from rest_framework_gis.pagination import GeoJsonPagination
+from jsonattrs.mixins import JsonAttrsMixin
 
+from core.mixins import LoginPermissionRequiredMixin, update_permissions
+from core.views import generic
+from organization.views import mixins as organization_mixins
+from resources.views import mixins as resource_mixins
 from . import mixins
+from .. import forms
+from .. import messages as error_messages
 from .. import serializers
 
 
@@ -91,3 +99,59 @@ class SpatialUnitTiles(APIPermissionRequiredMixin,
 
     def get_perms_objects(self):
         return [self.get_project()]
+
+
+class LocationDetail(LoginPermissionRequiredMixin,
+                     JsonAttrsMixin,
+                     mixins.SpatialUnitObjectMixin,
+                     organization_mixins.ProjectAdminCheckMixin,
+                     resource_mixins.HasUnattachedResourcesMixin,
+                     resource_mixins.DetachableResourcesListMixin,
+                     generic.DetailView):
+    template_name = 'spatial/location_detail.html'
+    permission_required = 'spatial.view'
+    permission_denied_message = error_messages.SPATIAL_VIEW
+    attributes_field = 'attributes'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['relationships'] = self.object.tenurerelationship_set.all(
+        ).select_related('party').defer('party__attributes')
+        return context
+
+
+class LocationsAdd(LoginPermissionRequiredMixin,
+                   mixins.SpatialQuerySetMixin,
+                   organization_mixins.ProjectAdminCheckMixin,
+                   generic.CreateView):
+    form_class = forms.LocationForm
+    template_name = 'spatial/location_add.html'
+    permission_required = update_permissions('spatial.add')
+    permission_denied_message = error_messages.SPATIAL_CREATE
+
+    def get(self, request, *args, **kwargs):
+        referrer = request.META.get('HTTP_REFERER', None)
+        if referrer:
+            current_url = reverse('async:spatial:add', kwargs=self.kwargs)
+            if current_url not in referrer:
+                request.session['cancel_add_location_url'] = referrer
+        else:
+            # In case the browser does not send any referrer
+            request.session['cancel_add_location_url'] = reverse(
+                'organization:project-dashboard', kwargs=self.kwargs)
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        cancel_url = self.request.session.get('cancel_add_location_url', None)
+        context['cancel_url'] = cancel_url or reverse(
+            'organization:project-dashboard', kwargs=self.kwargs)
+        return context
+
+    def get_perms_objects(self):
+        return [self.get_project()]
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['project'] = self.get_project()
+        return kwargs

@@ -51,7 +51,7 @@
     {% endif %}
     {% if is_allowed_add_location %}
     <div class="btn-full">
-      <a class="btn btn-primary" href="{% url 'locations:add' object.organization.slug object.slug %}">
+      <a class="btn btn-primary" href="#/locations/new">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {% trans "Add a location" %}
       </a>
     </div>

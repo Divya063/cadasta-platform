@@ -41,7 +41,7 @@ urlpatterns = [
     url(
         r'^(?P<organization>[-\w]+)/projects/(?P<project>[-\w]+)/$',
         default.ProjectMap.as_view(),
-        name='project-map'),
+        name='project-dashboard'),
     url(
         r'^(?P<organization>[-\w]+)/projects/(?P<project>[-\w]+)/edit/'
         'geometry/$',

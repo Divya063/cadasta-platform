@@ -6,6 +6,7 @@
 
 {% block extra_head %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.7.1/leaflet-geocoder-mapzen.css">
 <link rel="stylesheet" href="{% static 'css/leaflet.groupedlayercontrol.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/MarkerCluster.css' %}">
 <link rel="stylesheet" href="{% static 'css/MarkerCluster.Default.css' %}">
@@ -13,20 +14,8 @@
 
 {% block extra_script %}
 <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.7.1/leaflet-geocoder-mapzen.js"></script>
 <script src="{% static '/js/leaflet.groupedlayercontrol.min.js' %}"></script>
-<script src="{% static 'js/leaflet.markercluster.js' %}"></script>
-<script src="{% static 'js/L.Map.Deflate.js' %}"></script>
-<script src="{% static 'js/smap/index.js' %}"></script>
-
-<script type="text/html" id='overview-tab'>
-  
-</script>
-<script type="text/html" id='map-tab'>
-  <h1>I'm not!</h1>
-</script>
-<script type="text/html" id='location-tab'>
-  <h1>It's totally a <% this.object %>!</h1>
-</script>
 <script src="{% static 'js/smap/index.js' %}"></script>
 <script>
   var url = '/async/organizations/' +

@@ -9,7 +9,6 @@ $(window).load(function () {
   for (var i in js_files) {
     body.append($('<script src="/static/js/smap/' + js_files[i] + '"></script>'));
   }
-
   var sr = new SimpleRouter();
   sr.router();
 });

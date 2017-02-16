@@ -1,7 +1,6 @@
 var map = L.map('mapid');
 
-var SMap = (function() {
-  var map = L.map('mapid');
+var SMap = function() {
   var layerscontrol = L.control.layers().addTo(map);
 
   var geojsonTileLayer = new L.TileLayer.GeoJSON(
@@ -17,7 +16,7 @@ var SMap = (function() {
           layer.bindPopup("<div class=\"text-wrap\">" +
                       "<h2><span>Location</span>" +
                       feature.properties.type + "</h2></div>" +
-                      "<div class=\"btn-wrap\"><a href='" + feature.properties.url + "' class=\"btn btn-primary btn-sm btn-block\">" + options.trans['open'] + "</a>"  +
+                      "<div class=\"btn-wrap\"><a href='#/" + feature.properties.url + "' id=\"spatial-pop-up\" class=\"btn btn-primary btn-sm btn-block\">" + options.trans.open + "</a>"  +
                       "</div>");
         }
       }
@@ -25,8 +24,8 @@ var SMap = (function() {
 
   function add_tile_layers() {
     for (var i = 0, n = layers.length; i < n; i++) {
-      var attrs = L.Util.extend(layers[i]['attrs']);
-      var layer = {name: layers[i]['label'], url: layers[i]['url'], options: attrs};
+      var attrs = L.Util.extend(layers[i].attrs);
+      var layer = {name: layers[i].label, url: layers[i].url, options: attrs};
       var l = L.tileLayer(layer.url, layer.options);
       layerscontrol.addBaseLayer(l, layer.name);
 
@@ -56,8 +55,10 @@ var SMap = (function() {
       );
       boundary.addTo(map);
       projectBounds = boundary.getBounds();
+      options.projectExtent = projectBounds;
       if (options.fitBounds === 'project') {
         map.fitBounds(projectBounds);
+        return projectBounds;
       }
     } else {
       map.fitBounds([[-45.0, -180.0], [45.0, 180.0]]);
@@ -107,15 +108,42 @@ var SMap = (function() {
     };
   }
 
-  // $(window).on('hashchange', function() {
-  //   if (window.location.hash === '#overview')
-  //     $('.content-single').removeClass('detail-hidden')
-  //   else {
-  //       $('.content-single').addClass('detail-hidden')
-  //   }
+  function add_map_controls() {
+    var geocoder = L.control.geocoder('search-QctWfva', {
+      markers: false
+    }).addTo(map);
+    geocoder.on('select', function (e) {
+      map.setZoomAround(e.latlng, 9);
+    });
 
-  //   window.setTimeout(function() {
-  //     map.invalidateSize();
-  //   }, 400);
-  // })
-})();
+    var Geolocate = L.Control.extend({
+      options: {
+        position: 'topleft'
+      },
+
+      onAdd: function() {
+        var controlDiv = L.DomUtil.create(
+          'div', 'leaflet-bar leaflet-control leaflet-control-geolocate'
+        );
+        controlDiv.title = gettext('Go to my location');
+        L.DomEvent
+         .addListener(controlDiv, 'click', L.DomEvent.stopPropagation)
+         .addListener(controlDiv, 'click', L.DomEvent.preventDefault)
+         .addListener(controlDiv, 'click', geoLocate(map));
+
+        L.DomUtil.create('span', 'glyphicon glyphicon-map-marker', controlDiv);
+
+        return controlDiv;
+      }
+    });
+
+    map.addControl(new Geolocate());
+    return map;
+  }
+
+  return {
+    add_map_controls: add_map_controls,
+  };
+};
+
+var smap = new SMap();

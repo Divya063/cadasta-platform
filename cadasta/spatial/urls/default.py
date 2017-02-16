@@ -4,18 +4,18 @@ from ..views import default
 
 
 urls = [
-    url(
-        r'^locations/$',
-        default.LocationsList.as_view(),
-        name='list'),
-    url(
-        r'^locations/new/$',
-        default.LocationsAdd.as_view(),
-        name='add'),
-    url(
-        r'^locations/(?P<location>[-\w]+)/$',
-        default.LocationDetail.as_view(),
-        name='detail'),
+    # url(
+    #     r'^locations/$',
+    #     default.LocationsList.as_view(),
+    #     name='list'),
+    # url(
+    #     r'^locations/new/$',
+    #     default.LocationsAdd.as_view(),
+    #     name='add'),
+    # url(
+    #     r'^locations/(?P<location>[-\w]+)/$',
+    #     default.LocationDetail.as_view(),
+    #     name='detail'),
     url(
         r'^locations/(?P<location>[-\w]+)/edit/$',
         default.LocationEdit.as_view(),
