@@ -1,11 +1,84 @@
 // Based on http://joakim.beng.se/blog/posts/a-javascript-router-in-20-lines.html
 var SimpleRouter = function(){
   var routes = {};
+  var current_location = null
   // var state = {}
 
   function route(path, controller) {
     routes[path] = {};
     routes[path].controller = controller;
+  }
+
+  route('/map', function() {
+    hideDetailPannel();
+  });
+
+  route('/overview', function() {
+    resetLocationStyle();
+    displayDetailPannel();
+    map.fitBounds(options.projectExtent);
+  });
+
+  route('/', function() {
+    // Zoom back out to project extent.
+    resetLocationStyle();
+    displayDetailPannel();
+    map.fitBounds(options.projectExtent);
+  });
+
+  route('/locations/new', function() {
+    // Zoom into project bounds.
+    displayDetailPannel();
+    smap.add_map_controls();
+  });
+
+  route('/records/location', function() {
+    // Zoom into project bounds.
+    if (current_location) {
+      centerOnLocation(current_location);
+    }
+    hideModal();
+    displayDetailPannel();
+  });
+
+  route('/records/location/delete', function() {
+    // Zoom into project bounds.
+    displayModal('additionals_modals');
+    displayDetailPannel();
+    return document.getElementById("additional_modals")
+  });
+
+  route('/records/location/resources/add', function() {
+    displayModal('additionals_modals');
+    displayDetailPannel();
+    return document.getElementById("additional_modals")
+  });
+
+  var el = null;
+  function router() {
+    var hash_path = location.hash.slice(1) || '/';
+    var view_url = '/async' + location.pathname;
+
+    if (hash_path !== '/') {
+      view_url = view_url + hash_path.substr(1) + '/';
+    }
+    if (hash_path.includes('records/location')){
+      if (hash_path.includes('delete')) {
+        hash_path = '/records/location/delete';
+      } else if (hash_path.includes('resources/add')) {
+        hash_path = '/records/location/resources/add';
+      } else {
+        hash_path = '/records/location';
+
+      }
+    }
+
+    var route = routes[hash_path];
+    el = route.controller() || document.getElementById('project-detail');
+
+    $.get(view_url, function(response){
+      el.innerHTML = response;
+    });
   }
 
   function hideDetailPannel() {
@@ -26,93 +99,55 @@ var SimpleRouter = function(){
     }
   }
 
-
-  // function checkHashPath(hash_path) {
-  //   if (hash_path === '/map') {
-  //     hideDetailPannel();
-  //   } else if (hash_path === '/overview' || hash_path === '/') {
-  //     displayDetailPannel();
-  //     map.fitBounds(options.projectExtent);
-  //   } else if (hash_path.includes('location')) {
-  //     displayDetailPannel();
-  //   }
-  // }
-
-  route('/map', function() {
-    hideDetailPannel();
-  });
-
-  route('/overview', function() {
-    displayDetailPannel();
-    map.fitBounds(options.projectExtent);
-  });
-
-  route('/', function() {
-    // Zoom back out to project extent.
-    displayDetailPannel();
-    map.fitBounds(options.projectExtent);
-  });
-
-  route('/records/location', function() {
-    // Zoom into project bounds.
-    displayDetailPannel();
-  });
-
-
-  route('/locations/new', function() {
-    // Zoom into project bounds.
-    displayDetailPannel();
-    smap.add_map_controls();
-  });
-
-  // var dashboard_url = '{% url "async:project:dashboard" project.organization.slug project.slug %}'
-
-
-
-  var el = null;
-  function router() {
-    el = el || document.getElementById('project-detail');
-
-    var hash_path = location.hash.slice(1) || '/';
-
-    var view_url = '/async' + location.pathname;
-    if (hash_path !== '/') {
-      view_url = view_url + hash_path.substr(1) + '/';
+  function displayModal(modal_id) {
+    if (!$("#additional_modals").is(':visible')) {
+      $("#additional_modals").modal('show');
     }
-    if (hash_path.includes('records/location')){
-      hash_path = '/records/location';
-    }
-
-    var route = routes[hash_path];
-    route.controller();
-
-    $.get(view_url, function(response){
-      el.innerHTML = response;
-    });
   }
 
-  function centerOnLocation () {
+  function hideModal() {
+    if ($("#additional_modals").is(':visible')) {
+      $("#additional_modals").modal('hide');
+    }
+  }
+
+  function centerOnLocation(location) {
+    var bounds;
+    if (typeof(location.getBounds) === 'function'){
+      bounds = location.getBounds();
+    } else {
+      // If the spatial unit is a marker
+      var latLngs = [location.getLatLng()];
+      bounds = L.latLngBounds(latLngs);
+    }
+    if (bounds.isValid()){
+      map.fitBounds(bounds);
+    }
+
+    if (location.setStyle) {
+      location.setStyle({color: '#edaa00', fillColor: '#edaa00', weight: 3})
+    }
+  }
+
+  function setCurrentLocation () {
     map.on("popupopen", function(evt){
       currentPopup = evt.popup;
 
       $('#spatial-pop-up').click(function(e){
-        var bounds;
-        if (typeof(currentPopup._source.getBounds) === 'function'){
-          bounds = currentPopup._source.getBounds();
-        } else {
-          // If the spatial unit is a marker
-          var latLngs = [ currentPopup._source.getLatLng() ];
-          bounds = L.latLngBounds(latLngs);
-        }
-        if (bounds.isValid()){
-          map.fitBounds(bounds);
-        }
+        resetLocationStyle();
+        current_location = currentPopup._source
         map.closePopup();
       });
     });
   }
 
-  centerOnLocation();
+  setCurrentLocation();
+
+  function resetLocationStyle() {
+    if (current_location && current_location.setStyle) {
+      current_location.setStyle({color: '#3388ff', fillColor: '#3388ff', weight: 2})  
+    }
+  }
 
   return {
     router: router,

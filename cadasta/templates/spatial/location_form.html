@@ -43,7 +43,11 @@
         </div>
         <div class="panel-footer panel-buttons">
           <input class="btn btn-primary" type="submit" value="{% trans 'Save' %}"/>
-          <a class="btn btn-default cancel" href="{{ cancel_url }}">{% trans "Cancel" %}</a>
+          {% if location %}
+            <a class="btn btn-default cancel" href="#/records/location/{{ location.id }}">{% trans "Cancel" %}</a>
+          {% else %}
+            <a class="btn btn-default cancel" href="#/overview">{% trans "Cancel" %}</a>
+          {% endif %}
         </div>
       </div>
     </div>

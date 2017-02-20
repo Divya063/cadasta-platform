@@ -1,4 +1,3 @@
-{% extends "spatial/location_detail.html" %}
 {% load i18n %}
 {% load staticfiles %}
 
@@ -10,7 +9,6 @@
 {% endblock %}
 
 {% block modals %}
-{% url 'locations:detail' object.organization.slug object.slug location.id as cancel_url %}
 {% url 'locations:resource_new' object.organization.slug object.slug location.id as upload_url %}
-{% include 'resources/modal_add_lib.html' with cancel_url_hash="#resources" %}
+{% include 'resources/modal_add_lib.html' with cancel_url="#/records/location/"|add:location.id %}
 {% endblock %}

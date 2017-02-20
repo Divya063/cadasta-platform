@@ -16,19 +16,19 @@ urls = [
     #     r'^locations/(?P<location>[-\w]+)/$',
     #     default.LocationDetail.as_view(),
     #     name='detail'),
-    url(
-        r'^locations/(?P<location>[-\w]+)/edit/$',
-        default.LocationEdit.as_view(),
-        name='edit'),
-    url(
-        r'^locations/(?P<location>[-\w]+)/delete/$',
-        default.LocationDelete.as_view(),
-        name='delete'),
+    # url(
+    #     r'^locations/(?P<location>[-\w]+)/edit/$',
+    #     default.LocationEdit.as_view(),
+    #     name='edit'),
+    # url(
+    #     r'^locations/(?P<location>[-\w]+)/delete/$',
+    #     default.LocationDelete.as_view(),
+    #     name='delete'),
 
-    url(
-        r'^locations/(?P<location>[-\w]+)/resources/add/$',
-        default.LocationResourceAdd.as_view(),
-        name='resource_add'),
+    # url(
+    #     r'^locations/(?P<location>[-\w]+)/resources/add/$',
+    #     default.LocationResourceAdd.as_view(),
+    #     name='resource_add'),
     url(
         r'^locations/(?P<location>[-\w]+)/resources/new/$',
         default.LocationResourceNew.as_view(),

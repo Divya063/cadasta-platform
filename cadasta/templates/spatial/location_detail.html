@@ -4,8 +4,10 @@
     <h2 class="short"><span>{% trans "Location" %} </span>{{ location.name }}</h2>
     <div class="top-btn pull-right">
       <!-- Action buttons -->
-      <a class="btn btn-default btn-action btn-sm" href="{% url 'locations:edit' object.organization.slug object.slug location.id %}" title="{% trans 'Edit location' %}" aria-label="{% trans 'Edit location' %}"><span class="glyphicon glyphicon-pencil"></span></a>
-      <a class="btn btn-default btn-action btn-sm" href="{% url 'locations:delete' object.organization.slug object.slug location.id %}" title="{% trans 'Delete location' %}" aria-label="{% trans 'Delete location' %}"><span class="glyphicon glyphicon-trash"></span></a>
+      <a class="btn btn-default btn-action btn-sm" href="#/records/location/{{ location.id }}/edit" title="{% trans 'Edit location' %}" aria-label="{% trans 'Edit location' %}"><span class="glyphicon glyphicon-pencil"></span></a>
+      
+      <a class="btn btn-default btn-action btn-sm" href="#/records/location/{{ location.id }}/delete" title="{% trans 'Delete location' %}" aria-label="{% trans 'Delete location' %}"><span class="glyphicon glyphicon-trash"></span></a>
+      <!-- <a class="btn btn-default btn-action btn-sm" href="#delete_location" data-toggle="modal" title="{% trans 'Delete location' %}" aria-label="{% trans 'Delete location' %}"><span class="glyphicon glyphicon-trash"></span></a> -->
     </div>
   </div>
 
@@ -80,7 +82,7 @@
       {% if resource_list %}
         <div class="top-btn pull-right top-add">
           {% if has_unattached_resources %}
-          <a class="btn btn-primary btn-sm" href="{% url 'locations:resource_add' object.organization.slug object.slug location.id %}">
+          <a class="btn btn-primary btn-sm" href="#/records/location/{{ location.id }}/resources/add">
           {% else %}
           <a class="btn btn-primary btn-sm" href="{% url 'locations:resource_new' object.organization.slug object.slug location.id %}">
           {% endif %}
@@ -92,7 +94,7 @@
           <p>{% trans "This location does not have any attached resources. To attach a resource, select the button below." %}</p>
           <div class="btn-full">
             {% if has_unattached_resources %}
-            <a class="btn btn-primary" href="{% url 'locations:resource_add' object.organization.slug object.slug location.id %}">
+            <a class="btn btn-primary" href="#/records/location/{{ location.id }}/resources/add">
             {% else %}
             <a class="btn btn-primary" href="{% url 'locations:resource_new' object.organization.slug object.slug location.id %}">
             {% endif %}

@@ -81,51 +81,51 @@ from .. import forms
 #         return context
 
 
-class LocationEdit(LoginPermissionRequiredMixin,
-                   mixins.SpatialUnitObjectMixin,
-                   organization_mixins.ProjectAdminCheckMixin,
-                   generic.UpdateView):
-    template_name = 'spatial/location_edit.html'
-    form_class = forms.LocationForm
-    permission_required = update_permissions('spatial.edit')
-    permission_denied_message = error_messages.SPATIAL_UPDATE
+# class LocationEdit(LoginPermissionRequiredMixin,
+#                    mixins.SpatialUnitObjectMixin,
+#                    organization_mixins.ProjectAdminCheckMixin,
+#                    generic.UpdateView):
+#     template_name = 'spatial/location_edit.html'
+#     form_class = forms.LocationForm
+#     permission_required = update_permissions('spatial.edit')
+#     permission_denied_message = error_messages.SPATIAL_UPDATE
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['project'] = self.get_project()
-        return kwargs
-
-
-class LocationDelete(LoginPermissionRequiredMixin,
-                     mixins.SpatialUnitObjectMixin,
-                     organization_mixins.ProjectAdminCheckMixin,
-                     generic.DeleteView):
-    template_name = 'spatial/location_delete.html'
-    permission_required = update_permissions('spatial.delete')
-    permission_denied_message = error_messages.SPATIAL_DELETE
-
-    def get_success_url(self):
-        kwargs = self.kwargs
-        del kwargs['location']
-        return reverse('locations:list', kwargs=self.kwargs)
+#     def get_form_kwargs(self):
+#         kwargs = super().get_form_kwargs()
+#         kwargs['project'] = self.get_project()
+#         return kwargs
 
 
-class LocationResourceAdd(LoginPermissionRequiredMixin,
-                          mixins.SpatialUnitResourceMixin,
-                          base_generic.edit.FormMixin,
-                          organization_mixins.ProjectAdminCheckMixin,
-                          generic.DetailView):
-    template_name = 'spatial/resources_add.html'
-    form_class = AddResourceFromLibraryForm
-    permission_required = update_permissions('spatial.resources.add')
-    permission_denied_message = error_messages.SPATIAL_ADD_RESOURCE
+# class LocationDelete(LoginPermissionRequiredMixin,
+#                      mixins.SpatialUnitObjectMixin,
+#                      organization_mixins.ProjectAdminCheckMixin,
+#                      generic.DeleteView):
+#     template_name = 'spatial/location_delete.html'
+#     permission_required = update_permissions('spatial.delete')
+#     permission_denied_message = error_messages.SPATIAL_DELETE
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            form.save()
-            return self.form_valid(form)
+#     def get_success_url(self):
+#         kwargs = self.kwargs
+#         del kwargs['location']
+#         return reverse('locations:list', kwargs=self.kwargs)
+
+
+# class LocationResourceAdd(LoginPermissionRequiredMixin,
+#                           mixins.SpatialUnitResourceMixin,
+#                           base_generic.edit.FormMixin,
+#                           organization_mixins.ProjectAdminCheckMixin,
+#                           generic.DetailView):
+#     template_name = 'spatial/resources_add.html'
+#     form_class = AddResourceFromLibraryForm
+#     permission_required = update_permissions('spatial.resources.add')
+#     permission_denied_message = error_messages.SPATIAL_ADD_RESOURCE
+
+#     def post(self, request, *args, **kwargs):
+#         self.object = self.get_object()
+#         form = self.get_form()
+#         if form.is_valid():
+#             form.save()
+#             return self.form_valid(form)
 
 
 class LocationResourceNew(LoginPermissionRequiredMixin,
