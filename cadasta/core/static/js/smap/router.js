@@ -76,7 +76,7 @@ var SimpleRouter = function(){
     var hash_path = location.hash.slice(1) || '/';
 
     var view_url = '/async' + location.pathname;
-    if (url !== '/') {
+    if (hash_path !== '/') {
       view_url = view_url + hash_path.substr(1) + '/';
     }
     if (hash_path.includes('records/location')){
