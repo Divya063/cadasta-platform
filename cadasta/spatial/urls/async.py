@@ -29,6 +29,15 @@ urls = [
         r'^records/location/(?P<location>[-\w]+)/resources/add/$',
         async.LocationResourceAdd.as_view(),
         name='resource_add'),
+    url(
+        r'^records/location/(?P<location>[-\w]+)/resources/new/$',
+        async.LocationResourceNew.as_view(),
+        name='resource_new'),
+
+    url(
+        r'^records/location/(?P<location>[-\w]+)/relationships/new/$',
+        async.TenureRelationshipAdd.as_view(),
+        name='relationship_add'),
 
     url(
         r'^locations/new/$',

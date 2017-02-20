@@ -10,6 +10,7 @@ from jsonattrs.mixins import JsonAttrsMixin
 from core.mixins import LoginPermissionRequiredMixin, update_permissions
 from core.views import generic
 from organization.views import mixins as organization_mixins
+from party.messages import TENURE_REL_CREATE
 from resources.views import mixins as resource_mixins
 from resources.forms import AddResourceFromLibraryForm
 from . import mixins
@@ -204,3 +205,41 @@ class LocationResourceAdd(LoginPermissionRequiredMixin,
         if form.is_valid():
             form.save()
             return self.form_valid(form)
+
+
+class LocationResourceNew(LoginPermissionRequiredMixin,
+                          mixins.SpatialUnitResourceMixin,
+                          organization_mixins.ProjectAdminCheckMixin,
+                          resource_mixins.HasUnattachedResourcesMixin,
+                          generic.CreateView):
+    template_name = 'spatial/resources_new.html'
+    permission_required = update_permissions('spatial.resources.add')
+    permission_denied_message = error_messages.SPATIAL_ADD_RESOURCE
+
+
+class TenureRelationshipAdd(LoginPermissionRequiredMixin,
+                            mixins.SpatialUnitRelationshipMixin,
+                            organization_mixins.ProjectAdminCheckMixin,
+                            generic.CreateView):
+    template_name = 'spatial/relationship_add.html'
+    form_class = forms.TenureRelationshipForm
+    permission_required = update_permissions('tenure_rel.create')
+    permission_denied_message = TENURE_REL_CREATE
+
+    def get_perms_objects(self):
+        return [self.get_project()]
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['initial'] = {
+            'new_entity': not self.get_project().parties.exists(),
+        }
+        return kwargs
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        return context
+
+    def get_success_url(self):
+        return (reverse('locations:detail', kwargs=self.kwargs) +
+                '#relationships')

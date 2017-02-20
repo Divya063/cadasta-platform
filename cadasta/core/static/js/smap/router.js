@@ -54,6 +54,18 @@ var SimpleRouter = function(){
     return document.getElementById("additional_modals")
   });
 
+  route('/records/location/resources/new', function() {
+    displayModal('additionals_modals');
+    displayDetailPannel();
+    return document.getElementById("additional_modals")
+  });
+
+  route('/records/location/relationships/new', function() {
+    displayModal('additionals_modals');
+    displayDetailPannel();
+    return document.getElementById("additional_modals")
+  });
+
   var el = null;
   function router() {
     var hash_path = location.hash.slice(1) || '/';
@@ -65,13 +77,19 @@ var SimpleRouter = function(){
     if (hash_path.includes('records/location')){
       if (hash_path.includes('delete')) {
         hash_path = '/records/location/delete';
-      } else if (hash_path.includes('resources/add')) {
-        hash_path = '/records/location/resources/add';
+      } else if (hash_path.includes('resources')) {
+        if (hash_path.includes('add'))
+          hash_path = '/records/location/resources/add';
+        else if (hash_path.includes('new')) {
+          hash_path = '/records/location/resources/new';
+        }
+      } else if (hash_path.includes('relationships/new')) {
+        hash_path = '/records/location/relationships/new';
       } else {
         hash_path = '/records/location';
-
       }
     }
+    console.log(hash_path);
 
     var route = routes[hash_path];
     el = route.controller() || document.getElementById('project-detail');

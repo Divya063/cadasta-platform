@@ -29,15 +29,15 @@ urls = [
     #     r'^locations/(?P<location>[-\w]+)/resources/add/$',
     #     default.LocationResourceAdd.as_view(),
     #     name='resource_add'),
-    url(
-        r'^locations/(?P<location>[-\w]+)/resources/new/$',
-        default.LocationResourceNew.as_view(),
-        name='resource_new'),
+    # url(
+    #     r'^locations/(?P<location>[-\w]+)/resources/new/$',
+    #     default.LocationResourceNew.as_view(),
+    #     name='resource_new'),
 
-    url(
-        r'^locations/(?P<location>[-\w]+)/relationships/new/$',
-        default.TenureRelationshipAdd.as_view(),
-        name='relationship_add'),
+    # url(
+    #     r'^locations/(?P<location>[-\w]+)/relationships/new/$',
+    #     default.TenureRelationshipAdd.as_view(),
+    #     name='relationship_add'),
 ]
 
 urlpatterns = [
