@@ -109,17 +109,17 @@ class PartyResourcesNew(LoginPermissionRequiredMixin,
     permission_denied_message = error_messages.PARTY_RESOURCES_ADD
 
 
-class PartyRelationshipDetail(LoginPermissionRequiredMixin,
-                              JsonAttrsMixin,
-                              mixins.PartyRelationshipObjectMixin,
-                              organization_mixins.ProjectAdminCheckMixin,
-                              resource_mixins.HasUnattachedResourcesMixin,
-                              resource_mixins.DetachableResourcesListMixin,
-                              generic.DetailView):
-    template_name = 'party/relationship_detail.html'
-    permission_required = 'tenure_rel.view'
-    permission_denied_message = error_messages.TENURE_REL_VIEW
-    attributes_field = 'attributes'
+# class PartyRelationshipDetail(LoginPermissionRequiredMixin,
+#                               JsonAttrsMixin,
+#                               mixins.PartyRelationshipObjectMixin,
+#                               organization_mixins.ProjectAdminCheckMixin,
+#                               resource_mixins.HasUnattachedResourcesMixin,
+#                               resource_mixins.DetachableResourcesListMixin,
+#                               generic.DetailView):
+#     template_name = 'party/relationship_detail.html'
+#     permission_required = 'tenure_rel.view'
+#     permission_denied_message = error_messages.TENURE_REL_VIEW
+#     attributes_field = 'attributes'
 
 
 class PartyRelationshipEdit(LoginPermissionRequiredMixin,

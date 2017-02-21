@@ -9,6 +9,5 @@
 {% endblock %}
 
 {% block modals %}
-{% url 'locations:resource_new' object.organization.slug object.slug location.id as upload_url %}
 {% include 'resources/modal_add_lib.html' with cancel_url="#/records/location/"|add:location.id upload_url="#/records/location/"|add:location.id|add:"/resources/new" %}
 {% endblock %}

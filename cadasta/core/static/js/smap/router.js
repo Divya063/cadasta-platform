@@ -66,6 +66,12 @@ var SimpleRouter = function(){
     return document.getElementById("additional_modals")
   });
 
+  route('/records/relationship', function() {
+    // displayModal('additionals_modals');
+    displayDetailPannel();
+    // return document.getElementById("additional_modals")
+  });
+
   var el = null;
   function router() {
     var hash_path = location.hash.slice(1) || '/';
@@ -74,6 +80,7 @@ var SimpleRouter = function(){
     if (hash_path !== '/') {
       view_url = view_url + hash_path.substr(1) + '/';
     }
+
     if (hash_path.includes('records/location')){
       if (hash_path.includes('delete')) {
         hash_path = '/records/location/delete';
@@ -87,6 +94,21 @@ var SimpleRouter = function(){
         hash_path = '/records/location/relationships/new';
       } else {
         hash_path = '/records/location';
+      }
+
+    } else if (hash_path.includes('records/relationship')){
+      if (hash_path.includes('delete')) {
+        hash_path = '/records/relationship/delete';
+      } else if (hash_path.includes('resources')) {
+        if (hash_path.includes('add'))
+          hash_path = '/records/relationship/resources/add';
+        else if (hash_path.includes('new')) {
+          hash_path = '/records/relationship/resources/new';
+        }
+      } else if (hash_path.includes('relationships/new')) {
+        hash_path = '/records/relationship/relationships/new';
+      } else {
+        hash_path = '/records/relationship';
       }
     }
     console.log(hash_path);

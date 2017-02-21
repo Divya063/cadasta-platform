@@ -36,10 +36,10 @@ urls = [
 ]
 
 relationship_urls = [
-    url(
-        r'^relationships/(?P<relationship>[-\w]+)/$',
-        default.PartyRelationshipDetail.as_view(),
-        name='relationship_detail'),
+    # url(
+    #     r'^relationships/(?P<relationship>[-\w]+)/$',
+    #     default.PartyRelationshipDetail.as_view(),
+    #     name='relationship_detail'),
     url(
         r'^relationships/(?P<relationship>[-\w]+)/edit/$',
         default.PartyRelationshipEdit.as_view(),

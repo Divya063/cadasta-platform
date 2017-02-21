@@ -7,7 +7,5 @@
 {% endblock %}
 
 {% block modals %}
-{% url 'locations:detail' object.organization.slug object.slug location.id as cancel_url %}
-{% url 'locations:resource_add' object.organization.slug object.slug location.id as add_lib_url %}
 {% include 'resources/modal_upload.html' with cancel_url="#/records/location/"|add:location.id add_lib_url="#/records/location/"|add:location.id|add:"/resources/add" %}
 {% endblock %}

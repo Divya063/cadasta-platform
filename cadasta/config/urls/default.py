@@ -73,6 +73,9 @@ async = [
     url(r'^',
         include('organization.urls.async',
                 namespace='project')),
+    url(r'^',
+        include('party.urls.async',
+                namespace='party')),
 ]
 
 urlpatterns = [
