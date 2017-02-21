@@ -6,13 +6,6 @@
 
 {% endblock %}
 
-<form method="POST" id="location-wizard" class="col-sm-12 content-single" data-parsley-validate data-parsley-excluded=":hidden, [disabled]">
-  {% csrf_token %}
-  <div class="row">
-    <!-- Start overview map  -->
-    <!-- / end overview map -->
-    <!-- Overview detail  -->
-    <div class="col-md-12 detail detail-edit">
       <h2><span>{% trans "Location" %} </span>{% if add == 'yes' %}{% trans "Add location" %}{% else %}{% trans "Edit details" %}{% endif %}</h2>
       <div class="panel panel-default">
         <div class="panel-body">
@@ -44,13 +37,9 @@
         <div class="panel-footer panel-buttons">
           <input class="btn btn-primary" type="submit" value="{% trans 'Save' %}"/>
           {% if location %}
-            <a class="btn btn-default cancel" href="#/records/location/{{ location.id }}">{% trans "Cancel" %}</a>
+            <a class="btn btn-default cancel" href="{{ cancel_url }}">{% trans "Cancel" %}</a>
           {% else %}
             <a class="btn btn-default cancel" href="#/overview">{% trans "Cancel" %}</a>
           {% endif %}
         </div>
       </div>
-    </div>
-    <!-- / overview detail -->
-  </div>
-</form>

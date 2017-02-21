@@ -10,12 +10,14 @@ var SimpleRouter = function(){
   }
 
   route('/map', function() {
+    hideModal();
     hideDetailPannel();
   });
 
   route('/overview', function() {
     resetLocationStyle();
     displayDetailPannel();
+    hideModal();
     map.fitBounds(options.projectExtent);
   });
 
@@ -23,12 +25,14 @@ var SimpleRouter = function(){
     // Zoom back out to project extent.
     resetLocationStyle();
     displayDetailPannel();
+    hideModal();
     map.fitBounds(options.projectExtent);
   });
 
   route('/locations/new', function() {
     // Zoom into project bounds.
     displayDetailPannel();
+    hideModal();
     smap.add_map_controls();
   });
 
@@ -41,35 +45,72 @@ var SimpleRouter = function(){
     displayDetailPannel();
   });
 
+  route('/records/location/edit', function() {
+    // Zoom into project bounds.
+    displayDetailPannel(edit=true);
+  });
+
   route('/records/location/delete', function() {
     // Zoom into project bounds.
-    displayModal('additionals_modals');
     displayDetailPannel();
+    displayModal('additionals_modals');
     return document.getElementById("additional_modals")
   });
 
   route('/records/location/resources/add', function() {
-    displayModal('additionals_modals');
     displayDetailPannel();
+    displayModal('additionals_modals');
     return document.getElementById("additional_modals")
   });
 
   route('/records/location/resources/new', function() {
-    displayModal('additionals_modals');
     displayDetailPannel();
+    displayModal('additionals_modals');
     return document.getElementById("additional_modals")
   });
 
   route('/records/location/relationships/new', function() {
-    displayModal('additionals_modals');
     displayDetailPannel();
+    displayModal('additionals_modals');
     return document.getElementById("additional_modals")
   });
 
   route('/records/relationship', function() {
     // displayModal('additionals_modals');
     displayDetailPannel();
+    hideModal();
     // return document.getElementById("additional_modals")
+  });
+
+   route('/records/relationship/edit', function() {
+    // Zoom into project bounds.
+    displayDetailPannel(edit=true);
+    hideModal();
+  });
+
+  route('/records/relationship/delete', function() {
+    // Zoom into project bounds.
+    displayDetailPannel();
+    displayModal('additionals_modals');
+    return document.getElementById("additional_modals")
+  });
+
+  route('/records/relationship/resources/add', function() {
+    displayDetailPannel();
+    displayModal('additionals_modals');
+    return document.getElementById("additional_modals")
+  });
+
+  route('/records/relationship/resources/new', function() {
+    displayDetailPannel();
+    displayModal('additionals_modals');
+    return document.getElementById("additional_modals")
+  });
+
+  route('/records/relationship/relationships/new', function() {
+    displayDetailPannel();
+    displayModal('additionals_modals');
+    return document.getElementById("additional_modals")
   });
 
   var el = null;
@@ -84,6 +125,8 @@ var SimpleRouter = function(){
     if (hash_path.includes('records/location')){
       if (hash_path.includes('delete')) {
         hash_path = '/records/location/delete';
+      } else if (hash_path.includes('edit')) {
+        hash_path = '/records/location/edit';
       } else if (hash_path.includes('resources')) {
         if (hash_path.includes('add'))
           hash_path = '/records/location/resources/add';
@@ -99,6 +142,8 @@ var SimpleRouter = function(){
     } else if (hash_path.includes('records/relationship')){
       if (hash_path.includes('delete')) {
         hash_path = '/records/relationship/delete';
+      } else if (hash_path.includes('edit')) {
+        hash_path = '/records/relationship/edit';
       } else if (hash_path.includes('resources')) {
         if (hash_path.includes('add'))
           hash_path = '/records/relationship/resources/add';
@@ -130,12 +175,19 @@ var SimpleRouter = function(){
     }
   }
 
-  function displayDetailPannel() {
+  function displayDetailPannel(edit=false) {
+    console.log("edit? ", edit)
     if ($('.content-single').hasClass('detail-hidden')) {
       $('.content-single').removeClass('detail-hidden');
       window.setTimeout(function() {
         map.invalidateSize();
       }, 400);
+    }
+
+    if (!$('#project-detail').hasClass('detail-edit') && edit) {
+      $('#project-detail').addClass('detail-edit');
+    } else if (!edit && $('#project-detail').hasClass('detail-edit')) {
+      $('#project-detail').removeClass('detail-edit');
     }
   }
 

@@ -19,6 +19,5 @@
 {% endblock %} -->
 
 {% block content %}
-  {% url 'async:spatial:detail' object.organization.slug object.slug location.id as cancel_url %}
-  {% include "spatial/location_form.html" %}
+  {% include "spatial/location_form.html" with cancel_url="#/records/location/"|add:location.id %}
 {% endblock %}
